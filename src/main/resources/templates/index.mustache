@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script>
+        var token = '';
+    </script>
 </head>
 <body>
 Hello, {{user}}!
@@ -18,7 +21,7 @@ Hello, {{user}}!
         },
         body: `username=${this.username.value}&password=${this.password.value}`
     };
-    fetch('/login', payload).then(resp => resp.text()).then(text => console.log(text));
+    fetch('/login', payload).then(resp => resp.text()).then(t => token = t);
     return false;
 "
 >
@@ -26,5 +29,27 @@ Hello, {{user}}!
     <input type="password" name="password">
     <input type="submit" value="Sign in">
 </form>
+
+<input type="button" value="controller" onclick="
+fetch(
+    '/controller',
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+).then(resp => resp.json()).then(console.log)
+">
+
+<input type="button" value="hello" onclick="
+fetch(
+    '/hello',
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+).then(resp => resp.json()).then(console.log)
+">
 </body>
 </html>
